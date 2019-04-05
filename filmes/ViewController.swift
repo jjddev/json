@@ -7,14 +7,63 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var vPoster: UIImageView!
+    @IBOutlet weak var vTitulo: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    }
-
-
+        
+        let urlBase = "https://api.themoviedb.org/3/movie/550?api_key="
+        
+        let key = "4102490176cb4c40d776cc1d9bf066a9"
+        
+        
+        let url = "\(urlBase)\(key)"
+        
+        let baseImage = "https://image.tmdb.org/t/p/w500"
+        
+        
+        Alamofire.request(url).responseJSON { (response) in
+            //print(response.result.value)
+            
+            if response.result.isSuccess {
+                let json = JSON(response.result.value!)
+                self.vTitulo.text = json["title"].stringValue
+                
+                //montar caminho
+                let imagePath = "\(baseImage)\(json["poster_path"].stringValue)"
+                
+                let urlImage = URL(string: imagePath)
+                
+                do{
+                    //baixa os dados
+                    var bytes = try Data(contentsOf: urlImage!)
+                    //cria imagem
+                    let imagem = UIImage(data: bytes)
+                    
+                    self.vPoster.image = imagem
+                } catch {
+                    print(error)
+                }
+                
+                
+                
+                //self.vPoster.image =
+                
+            }
+            
+        }
+        
+        
+        
 }
+}
+
+
+
 
