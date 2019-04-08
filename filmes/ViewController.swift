@@ -40,27 +40,19 @@ class ViewController: UIViewController {
                 
                 let urlImage = URL(string: imagePath)
                 
-                do{
-                    //baixa os dados
-                    var bytes = try Data(contentsOf: urlImage!)
-                    //cria imagem
-                    let imagem = UIImage(data: bytes)
-                    
-                    self.vPoster.image = imagem
-                } catch {
-                    print(error)
+
+                DispatchQueue.global().async { [weak self] in
+                    if let bytes: Data? = try? Data(contentsOf: urlImage!) {
+                        if let imagem = UIImage(data: bytes!) {
+                            DispatchQueue.main.async {
+                                self!.vPoster.image = imagem
+                            }
+                        }
+                    }
                 }
-                
-                
-                
-                //self.vPoster.image =
-                
-            }
             
-        }
-        
-        
-        
+            }
+}
 }
 }
 
