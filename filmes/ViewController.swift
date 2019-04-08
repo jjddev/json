@@ -42,6 +42,15 @@ class ViewController: UIViewController {
                 
 
                 DispatchQueue.global().async { [weak self] in
+                    
+                    guard let strongSelf = self
+                        else {
+                            print("deu ruim")
+                            return
+                            
+                    }
+                    
+                    
                     if let bytes: Data? = try? Data(contentsOf: urlImage!) {
                         if let imagem = UIImage(data: bytes!) {
                             DispatchQueue.main.async {
